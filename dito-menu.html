@@ -1,0 +1,116 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`dito-menu`
+
+
+@demo demo/index.html 
+-->
+
+<dom-module id="dito-menu">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .dito-menu-li{
+            list-style: none;
+
+      }
+      .dito-menu-a{
+        padding:5px 10px;
+        cursor: pointer;
+        text-decoration: none;
+        box-sizing: border-box;
+        color: #333;
+        display:block;
+        width: 100%;
+        height:100%;
+        border-bottom : 1px solid #777;
+      }
+      .dito-menu-ul{
+        padding:10px;
+        margin:0;
+      }
+      .dito-menu-ul dito-menu{
+        display : none;
+      }
+    </style>
+        <ul class="dito-menu-ul">
+
+    <template is="dom-repeat" items="{{data}}">
+
+       <template is="dom-if" if="{{item.url}}">
+        <li class="dito-menu-li">
+            <a class="dito-menu-a" 
+                href="[[item.url]]"> [[ item.nombre ]] </a> 
+          
+        </li> 
+       </template>
+       
+       <template is="dom-if" if="{{item.children}}">
+         <li class="dito-menu-li"  
+             on-click="eventSubmenu">
+            <a class="dito-menu-a"> [[ item.nombre ]] </a> 
+          </li> 
+          <dito-menu  data="{{item.children}}"></dito-menu>
+
+       </template>
+        </ul>
+       
+       
+    </template>
+  </template>
+
+  <script>
+    var acuario = "zxsad";
+    Polymer({
+
+      is: 'dito-menu',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'dito-menu',
+        },
+        data : {
+          type: Object,
+          value : [
+                      { nombre : "inicio", url : "google.com"},
+                      { nombre : "desarrollo web", url : "google.com"},
+                      { nombre : "projectos", url : "google.com"},
+                      { nombre : "datos personales",
+                        children:[
+                          { nombre: "christian", url : "https://www.facebook.com/" },
+                          { nombre: "christian", children : [
+                          { nombre: "christian", url : "https://www.facebook.com/" },
+                          { nombre: "christian", url : "https://www.facebook.com/"  },
+                        ] },
+                        ]
+                      },                      
+                  ]
+   
+        }
+      },
+      created: function() {
+
+      },
+
+      eventSubmenu : function(e){
+        var datos = e.model.__data__;
+        var nodo = e.model._children[3];
+        var hijos = nodo.querySelectorAll("dito-menu");
+   
+        if(nodo.style.display == "block"){
+          nodo.style.display = "none";
+          hijos.forEach(function(e){
+            e.style.display = "none";
+          });
+        }else{
+          nodo.style.display = "block"
+        }
+        
+      }
+    });
+  </script>
+</dom-module>
